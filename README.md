@@ -12,6 +12,7 @@
 - 支持多种格式的规则书
 - 提供翻译界面
 - 自动保存翻译进度
+- 自动获取 BGA 游戏元数据
 
 ## 安装
 
@@ -62,19 +63,24 @@ LOG_LEVEL=INFO
 
 1. 初始化游戏目录：
 ```bash
-python src/main.py init-game <game_name>
+python -m src.main init-game <game_name>
 ```
 
-2. 将规则书 PDF 文件放入 `data/games/<game_name>/rules/original.pdf`
-
-3. 处理规则书：
+2. 获取游戏元数据：
 ```bash
-python src/main.py process-rulebook <game_name>
+python -m src.main fetch-game-info <game_name>
 ```
 
-4. 开始翻译：
+3. 将规则书 PDF 文件放入 `data/games/<game_name>/rules/original.pdf`
+
+4. 处理规则书：
 ```bash
-python src/main.py start-translation <game_name>
+python -m src.main process-rulebook <game_name>
+```
+
+5. 开始翻译：
+```bash
+python -m src.main start-translation <game_name>
 ```
 
 ## 目录结构
@@ -87,17 +93,24 @@ BGA-Translation-Helper/
 │           ├── rules/
 │           │   ├── original.pdf
 │           │   └── extracted.md
-│           └── translations/
-│               └── translation.md
+│           ├── translations/
+│           │   └── translation.md
+│           └── metadata/
+│               └── game_info.json
 ├── src/
 │   ├── ocr/
 │   │   ├── __init__.py
 │   │   ├── ocr_processor.py
 │   │   ├── pdf_processor.py
 │   │   └── text_formatter.py
+│   ├── bga_login.py
+│   ├── bga_translator.py
 │   └── main.py
+├── Doc/
+│   ├── architecture.md
+│   ├── workflow.md
+│   └── bga_api_flows.md
 ├── .env
-├── .env.example
 ├── .gitignore
 ├── README.md
 └── requirements.txt
