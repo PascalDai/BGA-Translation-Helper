@@ -1,6 +1,811 @@
 {
-  "name": "Propuh",
-  "created_at": "2025-04-04 13:52:28.531886",
-  "status": "initialized",
-  "last_updated": "2025-04-04 13:52:28.531903"
+  "game_name": "Propuh",
+  "publisher": "InterHuman Games",
+  "publisher_website": "https://interhumangames.com/",
+  "publisher_bgg_id": 50923,
+  "bgg_id": 408769,
+  "players": [
+    1,
+    2
+  ],
+  "suggest_player_number": null,
+  "not_recommend_player_number": null,
+  "estimated_duration": 5,
+  "fast_additional_time": 30,
+  "medium_additional_time": 40,
+  "slow_additional_time": 50,
+  "tie_breaker_description": "",
+  "losers_not_ranked": false,
+  "solo_mode_ranked": false,
+  "is_beta": 1,
+  "is_coop": 0,
+  "language_dependency": false,
+  "player_colors": [
+    "008000",
+    "ff0000"
+  ],
+  "favorite_colors_support": false,
+  "disable_player_order_swap_on_rematch": false,
+  "game_interface_width": {
+    "min": 320
+  },
+  "metadata": [
+    {
+      "type": "artist",
+      "value": "Endi Oblak"
+    },
+    {
+      "type": "bannerBlurhash",
+      "value": "LDLg;0?b~q9Z~pM|IUM{RjofWVs+"
+    },
+    {
+      "type": "complexity",
+      "value": 2
+    },
+    {
+      "type": "description",
+      "value": [
+        {
+          "text": "受当地迷信和纸牌游戏启发的战略生存棋盘游戏。"
+        },
+        {
+          "text": "每个玩家一次抽取卡牌并将他们相互组合或者与版面上“祖母”的地点组合来达到他们的目标。"
+        },
+        {
+          "text": "Playing as the protagonist, you must complete a series of missions to win before your time is up or the notorious \"Propuh\" enters your house. Move the \"Grandmother\" to the most critical location inside the house to complete tasks easily or gain an advantage."
+        },
+        {
+          "text": "至于第二个玩家(对手)，玩非物质“Propuh”的人从同一副牌中抽取牌，并试图进入房子。一旦“Propuh”在里面，它就赢了！"
+        }
+      ]
+    },
+    {
+      "type": "designer",
+      "value": "Damir Debanic"
+    },
+    {
+      "type": "diplomacy",
+      "value": 2
+    },
+    {
+      "type": "luck",
+      "value": 2
+    },
+    {
+      "type": "publicationYear",
+      "value": 2024
+    },
+    {
+      "type": "strategy",
+      "value": 3
+    },
+    {
+      "type": "buyButton",
+      "value": [
+        {
+          "label": "Gamefound",
+          "url": "https://gamefound.com/en/projects/interhuman-games/propuh-the-cardboard-edition?ref=explore-creator-page"
+        }
+      ]
+    }
+  ],
+  "publishers": [
+    {
+      "name": "InterHuman Games",
+      "url": "https://interhumangames.com/"
+    }
+  ],
+  "id": 2271,
+  "version": "250331-1039",
+  "assets_url": "https://x.boardgamearena.net/data/themereleases/250402-1132/games/propuh/250331-1039/img",
+  "options": [
+    {
+      "id": 201,
+      "values": [
+        {
+          "id": 0,
+          "name": "普通模式"
+        },
+        {
+          "id": 1,
+          "name": "友谊赛模式"
+        },
+        {
+          "id": 2,
+          "name": "竞技场模式",
+          "no_player_selection": true
+        }
+      ],
+      "name": "游戏模式",
+      "level": "global",
+      "type": "choice"
+    },
+    {
+      "id": 200,
+      "values": [
+        {
+          "id": 0,
+          "name": " 即时制 • 快速 ",
+          "shortname": " 即时制 • 快速 ",
+          "tinyname": "快速"
+        },
+        {
+          "id": 1,
+          "name": " 即时制 • 中速 ",
+          "shortname": " 即时制 • 中速 ",
+          "tinyname": "普通"
+        },
+        {
+          "id": 2,
+          "name": " 即时制 • 慢速 ",
+          "shortname": " 即时制 • 慢速 ",
+          "tinyname": "慢速"
+        },
+        {
+          "id": 5,
+          "name": " 即时制 • 固定时间限制 ",
+          "no_player_selection": true,
+          "shortname": "即时制"
+        },
+        {
+          "id": 9,
+          "name": "没有时间限制 • 仅限朋友",
+          "no_player_selection": true,
+          "shortname": "没有时间限制 • 仅限朋友"
+        },
+        {
+          "id": 10,
+          "name": "回合制（快速）．每天行动二十四次",
+          "shortname": "回合制（快速）．每天行动二十四次",
+          "tinyname": "每天24次行动"
+        },
+        {
+          "id": 11,
+          "name": "回合制（快速）．每天行动十二次",
+          "shortname": "回合制（快速）．每天行动十二次",
+          "tinyname": "每天12次行动"
+        },
+        {
+          "id": 12,
+          "name": "回合制（快速）．每天行动八次",
+          "shortname": "回合制（快速）．每天行动八次",
+          "tinyname": "每天8次行动"
+        },
+        {
+          "id": 13,
+          "name": "回合制 每天四次行动",
+          "shortname": "回合制 每天四次行动",
+          "tinyname": "每天4次行动"
+        },
+        {
+          "id": 14,
+          "name": "回合制 每天三次行动",
+          "shortname": "回合制 每天三次行动",
+          "tinyname": "每天3次行动"
+        },
+        {
+          "id": 15,
+          "name": "回合制 每天两次行动",
+          "shortname": "回合制 每天两次行动",
+          "tinyname": "每天2次行动"
+        },
+        {
+          "id": 17,
+          "name": "回合制 每天一次行动",
+          "shortname": "回合制 每天一次行动",
+          "tinyname": "每天1次行动"
+        },
+        {
+          "id": 19,
+          "name": "回合制 两天一次行动",
+          "shortname": "回合制 两天一次行动",
+          "tinyname": "每2天一次行动"
+        },
+        {
+          "id": 20,
+          "name": "没有时间限制 • 仅限朋友",
+          "shortname": "没有时间限制 • 仅限朋友"
+        },
+        {
+          "id": 21,
+          "name": "回合制 固定时间限制",
+          "no_player_selection": true,
+          "shortname": "回合制"
+        }
+      ],
+      "name": "回合时间",
+      "level": "global",
+      "type": "choice",
+      "displaycondition": [
+        {
+          "type": "otheroption",
+          "id": 201,
+          "value": [
+            0,
+            2
+          ]
+        }
+      ],
+      "default": 1
+    },
+    {
+      "id": 204,
+      "values": [],
+      "name": "分配给每位玩家的时间",
+      "level": "global",
+      "type": "choice",
+      "template": {
+        "namearg": "%s minutes",
+        "default": 0
+      },
+      "displaycondition": [
+        {
+          "type": "otheroption",
+          "id": 200,
+          "value": [
+            5,
+            21
+          ]
+        }
+      ]
+    },
+    {
+      "id": 206,
+      "values": [
+        {
+          "id": 0,
+          "name": "全天候（无游玩时段）",
+          "disable": true
+        },
+        {
+          "id": 1,
+          "name": "00:00 &rarr; 12:00"
+        },
+        {
+          "id": 2,
+          "name": "01:00 &rarr; 13:00"
+        },
+        {
+          "id": 3,
+          "name": "02:00 &rarr; 14:00"
+        },
+        {
+          "id": 4,
+          "name": "03:00 &rarr; 15:00"
+        },
+        {
+          "id": 5,
+          "name": "04:00 &rarr; 16:00"
+        },
+        {
+          "id": 6,
+          "name": "04:00 &rarr; 17:00"
+        },
+        {
+          "id": 7,
+          "name": "06:00 &rarr; 18:00"
+        },
+        {
+          "id": 8,
+          "name": "07:00 &rarr; 19:00"
+        },
+        {
+          "id": 9,
+          "name": "08:00 &rarr; 20:00"
+        },
+        {
+          "id": 10,
+          "name": "09:00 &rarr; 21:00"
+        },
+        {
+          "id": 11,
+          "name": "10:00 &rarr; 22:00"
+        },
+        {
+          "id": 12,
+          "name": "11:00 &rarr; 23:00"
+        },
+        {
+          "id": 13,
+          "name": "12:00 &rarr; 00:00"
+        },
+        {
+          "id": 14,
+          "name": "13:00 &rarr; 01:00"
+        },
+        {
+          "id": 15,
+          "name": "14:00 &rarr; 02:00"
+        },
+        {
+          "id": 16,
+          "name": "15:00 &rarr; 03:00"
+        },
+        {
+          "id": 17,
+          "name": "16:00 &rarr; 04:00"
+        },
+        {
+          "id": 18,
+          "name": "17:00 &rarr; 05:00"
+        },
+        {
+          "id": 19,
+          "name": "18:00 &rarr; 06:00"
+        },
+        {
+          "id": 20,
+          "name": "19:00 &rarr; 07:00"
+        },
+        {
+          "id": 21,
+          "name": "20:00 &rarr; 08:00"
+        },
+        {
+          "id": 22,
+          "name": "21:00 &rarr; 09:00"
+        },
+        {
+          "id": 23,
+          "name": "22:00 &rarr; 10:00"
+        },
+        {
+          "id": 24,
+          "name": "23:00 &rarr; 11:00"
+        }
+      ],
+      "name": "游玩时段",
+      "level": "global",
+      "type": "choice",
+      "default": 0,
+      "displaycondition": [
+        {
+          "type": "otheroption",
+          "id": 200,
+          "value": [
+            10,
+            11,
+            12,
+            21
+          ]
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "values": [
+        {
+          "id": 1,
+          "name": "简单",
+          "description": "开始时没有Propuh代币"
+        },
+        {
+          "id": 2,
+          "name": "普通",
+          "description": "开始时床上有一个Propuh代币"
+        },
+        {
+          "id": 3,
+          "name": "困难",
+          "description": "开始时每一个地点有一个Propuh代币"
+        },
+        {
+          "id": 4,
+          "name": "随机",
+          "description": "根据随机难度卡牌，每个地点的最大Propuh标志物数量"
+        }
+      ],
+      "name": "难度",
+      "displaycondition": [
+        {
+          "type": "maxplayers",
+          "value": 1
+        }
+      ],
+      "level": "base",
+      "type": "choice",
+      "boolTrueId": null,
+      "default": 1
+    },
+    {
+      "id": 101,
+      "values": [
+        {
+          "id": 1,
+          "name": "1 (简单)",
+          "description": "每个随机难度卡牌在一个地点放置1或2个标志物"
+        },
+        {
+          "id": 2,
+          "name": "2 (普通)",
+          "description": "每个随机难度卡牌在一个地点放置1或2个标志物"
+        },
+        {
+          "id": 3,
+          "name": "3 (困难)",
+          "description": "每个随机难度卡牌在一个地点放置1或2个标志物"
+        },
+        {
+          "id": 4,
+          "name": "4 (不可能?!)",
+          "description": "每个随机难度卡牌在一个地点放置1或2个标志物"
+        }
+      ],
+      "name": "随机困难卡牌抽取",
+      "displaycondition": [
+        {
+          "type": "otheroption",
+          "id": 100,
+          "value": 4
+        },
+        {
+          "type": "maxplayers",
+          "value": 1
+        }
+      ],
+      "default": 2,
+      "level": "base",
+      "type": "choice",
+      "boolTrueId": null
+    }
+  ],
+  "previews": {
+    "w640": {
+      "webm": "https://x.boardgamearena.net/data/gamepreviews/2271/en-w640.webm?cb=1741667326",
+      "mp4": "https://x.boardgamearena.net/data/gamepreviews/2271/en-w640.mp4?cb=1741667326",
+      "gif": "https://x.boardgamearena.net/data/gamepreviews/2271/en-w640.gif?cb=1741667326"
+    },
+    "w320": {
+      "webm": "https://x.boardgamearena.net/data/gamepreviews/2271/en-w320.webm?cb=1741667326",
+      "mp4": "https://x.boardgamearena.net/data/gamepreviews/2271/en-w320.mp4?cb=1741667326",
+      "gif": "https://x.boardgamearena.net/data/gamepreviews/2271/en-w320.gif?cb=1741667326"
+    }
+  },
+  "developers": [
+    {
+      "name": "Fearinn",
+      "realname": null,
+      "id": 92680243
+    }
+  ],
+  "maintainers": [],
+  "game_group_id": "17647571",
+  "game_group_name": "Propuh players",
+  "translation_ratios": {
+    "human": 65,
+    "machine": 0,
+    "tuto": 31
+  },
+  "in_progress": 9,
+  "tutorial": {
+    "tutorial_id": "1872",
+    "tutorial_author": "53284393",
+    "player_fullname": "Infi220",
+    "tutorial_lang": "en",
+    "tutorial_table": "650336025",
+    "tutorial_viewpoint": "88656919",
+    "UNIX_TIMESTAMP( tutorial_publishdate )": "1743435910",
+    "rating": "4.3913",
+    "viewed": "50",
+    "status": "public",
+    "duration": null,
+    "table_siteversion": "250326-1050"
+  },
+  "links": [
+    {
+      "id": 29500,
+      "url": "https://boardgamegeek.com/filepage/283252/propuh-rulebook-english",
+      "label": "Rulebook",
+      "lang": "en",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 1,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 30077,
+      "url": "https://lecu1012.com/bga_propuh/",
+      "label": "『プロップ』の遊び方・魅力をご紹介！",
+      "lang": "ja",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 1,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29499,
+      "url": "https://boardgamegeek.com/boardgame/408769/propuh",
+      "label": "BGG",
+      "lang": "en",
+      "type": "link",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29501,
+      "url": "https://boardgamegeek.com/filepage/290924/propuh-rulebook-french",
+      "label": "R&egrave;gles (BGG)",
+      "lang": "fr",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29505,
+      "url": "https://boardgamegeek.com/filepage/283519/propuh-regelbuch-deutsch",
+      "label": "Regelbuch",
+      "lang": "de",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29502,
+      "url": "https://boardgamegeek.com/filepage/283520/propuh-regulamin-polski",
+      "label": "Regulamin (BGG)",
+      "lang": "pl",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29503,
+      "url": "https://boardgamegeek.com/filepage/290925/propuh-rulebook-italian",
+      "label": "Regolamento (BGG)",
+      "lang": "it",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29506,
+      "url": "https://boardgamegeek.com/filepage/283518/propuh-libro-de-reglas",
+      "label": "Reglas (BGG)",
+      "lang": "es",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29504,
+      "url": "https://boardgamegeek.com/filepage/283518/propuh-libro-de-reglas",
+      "label": "Reglas (BGG)",
+      "lang": "pt",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29507,
+      "url": "https://boardgamegeek.com/filepage/290926/propuh-rulebook-croatian",
+      "label": "Pravilnik",
+      "lang": "hr",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29508,
+      "url": "https://boardgamegeek.com/filepage/290923/propuh-rulebook-czech",
+      "label": "Pravidla (BGG)",
+      "lang": "cs",
+      "type": "rules",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29497,
+      "url": "https://www.youtube.com/watch?v=bUIWRw1aVmU",
+      "label": "2-player gameplay",
+      "lang": "en",
+      "type": "video",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    },
+    {
+      "id": 29498,
+      "url": "https://www.youtube.com/watch?v=KXx-M7307sQ",
+      "label": "Single-player gameplay",
+      "lang": "en",
+      "type": "video",
+      "is_playerlang": false,
+      "status": "valid",
+      "thumb": 0,
+      "preasons": [],
+      "thumbed": false,
+      "format": "link"
+    }
+  ],
+  "time_limits": {
+    "0": {
+      "additional_time_per_move": 30,
+      "maximum_time_per_move": 180,
+      "extra_time_to_think_to_expel": 300,
+      "initial_time_to_thing": 150
+    },
+    "1": {
+      "additional_time_per_move": 40,
+      "maximum_time_per_move": 240,
+      "extra_time_to_think_to_expel": 300,
+      "initial_time_to_thing": 180
+    },
+    "2": {
+      "additional_time_per_move": 50,
+      "maximum_time_per_move": 300,
+      "extra_time_to_think_to_expel": 300,
+      "initial_time_to_thing": 210
+    },
+    "5": {
+      "additional_time_per_move": 0,
+      "maximum_time_per_move": 300,
+      "extra_time_to_think_to_expel": 0,
+      "initial_time_to_thing": null
+    },
+    "9": {
+      "additional_time_per_move": 2592000,
+      "maximum_time_per_move": 691200,
+      "extra_time_to_think_to_expel": 518400,
+      "initial_time_to_thing": 7776000
+    },
+    "10": {
+      "additional_time_per_move": 1800,
+      "maximum_time_per_move": 43200,
+      "extra_time_to_think_to_expel": 5400,
+      "initial_time_to_thing": 43200
+    },
+    "11": {
+      "additional_time_per_move": 3600,
+      "maximum_time_per_move": 43200,
+      "extra_time_to_think_to_expel": 10800,
+      "initial_time_to_thing": 43200
+    },
+    "12": {
+      "additional_time_per_move": 5400,
+      "maximum_time_per_move": 43200,
+      "extra_time_to_think_to_expel": 16200,
+      "initial_time_to_thing": 43200
+    },
+    "13": {
+      "additional_time_per_move": 21600,
+      "maximum_time_per_move": 86400,
+      "extra_time_to_think_to_expel": 64800,
+      "initial_time_to_thing": 86400
+    },
+    "14": {
+      "additional_time_per_move": 28800,
+      "maximum_time_per_move": 86400,
+      "extra_time_to_think_to_expel": 86400,
+      "initial_time_to_thing": 86400
+    },
+    "15": {
+      "additional_time_per_move": 43200,
+      "maximum_time_per_move": 129600,
+      "extra_time_to_think_to_expel": 129600,
+      "initial_time_to_thing": 129600
+    },
+    "17": {
+      "additional_time_per_move": 86400,
+      "maximum_time_per_move": 259200,
+      "extra_time_to_think_to_expel": 259200,
+      "initial_time_to_thing": 259200
+    },
+    "19": {
+      "additional_time_per_move": 172800,
+      "maximum_time_per_move": 518400,
+      "extra_time_to_think_to_expel": 518400,
+      "initial_time_to_thing": 518400
+    },
+    "20": {
+      "additional_time_per_move": 2592000,
+      "maximum_time_per_move": 691200,
+      "extra_time_to_think_to_expel": 518400,
+      "initial_time_to_thing": 7776000
+    },
+    "21": {
+      "additional_time_per_move": 0,
+      "maximum_time_per_move": 5400000,
+      "extra_time_to_think_to_expel": 0,
+      "initial_time_to_thing": null
+    }
+  },
+  "estimated_durations": {
+    "0": {
+      "avg": 8
+    },
+    "1": {
+      "1": 7,
+      "2": 7,
+      "avg": 7
+    },
+    "2": {
+      "1": 5,
+      "avg": 5
+    },
+    "9": {
+      "1": 6,
+      "2": 8,
+      "avg": 7
+    },
+    "11": {
+      "avg": 1037
+    },
+    "12": {
+      "2": 12,
+      "avg": 12
+    },
+    "13": {
+      "2": 3008,
+      "avg": 3008
+    },
+    "14": {
+      "2": 2192,
+      "avg": 2192
+    },
+    "15": {
+      "1": 7,
+      "2": 2828,
+      "avg": 1699
+    },
+    "17": {
+      "2": 3172,
+      "avg": 3113
+    },
+    "19": {
+      "2": 9523,
+      "avg": 8163
+    },
+    "20": {
+      "1": 260,
+      "2": 8605,
+      "avg": 3660
+    },
+    "avg": 7
+  },
+  "express_start": false
 }

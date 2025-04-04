@@ -9,7 +9,8 @@ import os
 import logging
 import argparse
 from pathlib import Path
-from ocr import OCRManager
+from .ocr import OCRManager
+from .bga_translator import BGATranslator
 
 # 配置日志
 logging.basicConfig(
@@ -32,6 +33,7 @@ class GameManager:
         self.base_dir = Path("data/games") / game_name
         self.rules_dir = self.base_dir / "rules"
         self.translations_dir = self.base_dir / "translations"
+        self.metadata_dir = self.base_dir / "metadata"
         
         # 创建必要的目录
         self._create_directories()
@@ -41,9 +43,30 @@ class GameManager:
         try:
             os.makedirs(self.rules_dir, exist_ok=True)
             os.makedirs(self.translations_dir, exist_ok=True)
+            os.makedirs(self.metadata_dir, exist_ok=True)
             logger.info(f"成功创建游戏目录: {self.game_name}")
         except Exception as e:
             logger.error(f"创建游戏目录失败: {e}")
+            raise
+    
+    def fetch_game_info(self):
+        """获取游戏信息"""
+        try:
+            # 初始化翻译器
+            translator = BGATranslator()
+            
+            # 登录 BGA
+            if not translator.login():
+                raise Exception("登录失败")
+            
+            # 获取游戏信息
+            if translator.update_game_info(self.game_name):
+                logger.info(f"成功获取游戏 {self.game_name} 的信息")
+            else:
+                raise Exception(f"获取游戏 {self.game_name} 的信息失败")
+                
+        except Exception as e:
+            logger.error(f"获取游戏信息失败: {e}")
             raise
     
     def process_rulebook(self):
@@ -85,24 +108,29 @@ def main():
     process_parser = subparsers.add_parser("process-rulebook", help="处理规则书")
     process_parser.add_argument("game_name", help="游戏名称")
     
+    # 获取游戏信息命令
+    fetch_info_parser = subparsers.add_parser("fetch-game-info", help="获取游戏信息")
+    fetch_info_parser.add_argument("game_name", help="游戏名称")
+    
     args = parser.parse_args()
     
-    if args.command == "init-game":
-        try:
-            GameManager(args.game_name)
+    try:
+        game_manager = GameManager(args.game_name)
+        
+        if args.command == "init-game":
             logger.info(f"游戏 {args.game_name} 初始化完成")
-        except Exception as e:
-            logger.error(f"初始化游戏失败: {e}")
-    
-    elif args.command == "process-rulebook":
-        try:
-            game_manager = GameManager(args.game_name)
+            
+        elif args.command == "process-rulebook":
             game_manager.process_rulebook()
-        except Exception as e:
-            logger.error(f"处理规则书失败: {e}")
-    
-    else:
-        parser.print_help()
+            
+        elif args.command == "fetch-game-info":
+            game_manager.fetch_game_info()
+            
+        else:
+            parser.print_help()
+            
+    except Exception as e:
+        logger.error(f"操作失败: {e}")
 
 if __name__ == "__main__":
     main() 

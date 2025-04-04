@@ -41,7 +41,7 @@ python main.py extract-text <game_name>
 - 自动提取文本
 - 保存到 `rules/extracted.md`
 
-## 3. 获取 BGA 翻译
+## 3. 获取游戏元数据
 
 ### 3.1 配置 BGA 账号
 
@@ -49,7 +49,28 @@ python main.py extract-text <game_name>
 python main.py config-bga --username <username> --password <password>
 ```
 
-### 3.2 获取翻译
+### 3.2 获取游戏信息
+
+```bash
+python main.py fetch-game-info <game_name>
+```
+
+- 自动登录 BGA
+- 获取游戏详细信息
+- 保存到 `data/games/<game_name>/metadata/game_info.json`
+
+### 3.3 文件结构
+
+```mermaid
+graph TD
+    A[data/games] --> B[game_name]
+    B --> C[metadata]
+    C --> D[game_info.json]
+```
+
+## 4. 获取 BGA 翻译
+
+### 4.1 获取翻译
 
 ```bash
 python main.py fetch-translations <game_name>
@@ -59,9 +80,9 @@ python main.py fetch-translations <game_name>
 - 抓取已有翻译
 - 保存到 `translations/bga_translations.md`
 
-## 4. 翻译工作
+## 5. 翻译工作
 
-### 4.1 开始翻译
+### 5.1 开始翻译
 
 ```bash
 python main.py start-translation <game_name>
@@ -71,7 +92,7 @@ python main.py start-translation <game_name>
 - 提供已有翻译参考
 - 支持实时保存
 
-### 4.2 翻译界面
+### 5.2 翻译界面
 
 ```mermaid
 graph LR
@@ -81,14 +102,14 @@ graph LR
     E[状态] --> B
 ```
 
-### 4.3 保存翻译
+### 5.3 保存翻译
 
 - 自动保存到 `translations/my_translations.md`
 - 支持导出为其他格式
 
-## 5. 提交翻译
+## 6. 提交翻译
 
-### 5.1 准备提交
+### 6.1 准备提交
 
 ```bash
 python main.py prepare-submission <game_name>
@@ -97,14 +118,14 @@ python main.py prepare-submission <game_name>
 - 检查翻译完整性
 - 生成提交格式
 
-### 5.2 提交到 BGA
+### 6.2 提交到 BGA
 
 - 手动复制翻译内容
 - 在 BGA 平台提交
 
-## 6. 日常维护
+## 7. 日常维护
 
-### 6.1 更新翻译
+### 7.1 更新翻译
 
 ```bash
 python main.py update-translations <game_name>
@@ -113,7 +134,7 @@ python main.py update-translations <game_name>
 - 获取最新 BGA 翻译
 - 合并到本地文件
 
-### 6.2 备份数据
+### 7.2 备份数据
 
 ```bash
 python main.py backup <game_name>
@@ -129,18 +150,19 @@ flowchart TD
     A[开始] --> B[初始化游戏]
     B --> C[准备规则书]
     C --> D[OCR处理]
-    D --> E[获取BGA翻译]
-    E --> F[开始翻译]
-    F --> G{翻译完成?}
-    G -->|否| F
-    G -->|是| H[准备提交]
-    H --> I[提交到BGA]
-    I --> J[更新维护]
-    J --> K[结束]
+    D --> E[获取游戏元数据]
+    E --> F[获取BGA翻译]
+    F --> G[开始翻译]
+    G --> H{翻译完成?}
+    H -->|否| G
+    H -->|是| I[准备提交]
+    I --> J[提交到BGA]
+    J --> K[更新维护]
+    K --> L[结束]
 
     subgraph 日常维护
-    L[定期备份] --> M[更新翻译]
-    M --> N[检查完整性]
+    M[定期备份] --> N[更新翻译]
+    N --> O[检查完整性]
     end
 ```
 
