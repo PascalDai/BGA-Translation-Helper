@@ -8,6 +8,7 @@ BGA Translation Helper 主程序入口
 import argparse
 import logging
 from pathlib import Path
+from utils.game_manager import GameManager
 
 # 配置日志
 logging.basicConfig(
@@ -19,7 +20,12 @@ logger = logging.getLogger(__name__)
 def init_game(args):
     """初始化新游戏目录"""
     logger.info(f"正在初始化游戏: {args.game_name}")
-    # TODO: 实现游戏目录初始化逻辑
+    
+    game_manager = GameManager()
+    if game_manager.init_game(args.game_name):
+        logger.info(f"游戏 {args.game_name} 初始化成功")
+    else:
+        logger.error(f"游戏 {args.game_name} 初始化失败")
 
 def extract_text(args):
     """提取规则书文本"""
