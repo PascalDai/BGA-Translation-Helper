@@ -1,20 +1,19 @@
-# BGA 翻译助手
+# 🎲 BGA 翻译助手
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 
-一个帮助翻译 Board Game Arena 游戏规则的工具。
+帮助翻译 Board Game Arena (BGA) 平台上的桌游内容，让更多中文玩家能够享受桌游的乐趣！
 
-## 功能特点
+## ✨ 特性
 
-- 自动提取规则书文本
-- 使用 Mistral OCR 进行文本识别
-- 支持多种格式的规则书
-- 提供翻译界面
-- 自动保存翻译进度
-- 自动获取 BGA 游戏元数据
+- 🔄 自动获取 BGA 游戏元数据
+- 📝 获取现有翻译内容作为参考
+- 📊 生成结构化的翻译数据
+- 📖 支持规则书文本提取
+- 🤖 支持使用 AI 辅助翻译
 
-## 安装
+## 🛠️ 安装
 
 1. 克隆仓库：
 ```bash
@@ -36,103 +35,92 @@ pip install -r requirements.txt
 ```
 
 4. 配置环境变量：
-```bash
-cp .env.example .env
-# 编辑 .env 文件，填入您的配置信息
+   - 复制 `.env.example` 为 `.env`
+   - 填写您的 BGA 账号信息：
+```ini
+BGA_USERNAME=your_username
+BGA_PASSWORD=your_password
+SAVE_RAW_HTML=true
 ```
 
-## 配置说明
+## 📋 使用方法
 
-在项目根目录下创建 `.env` 文件，包含以下配置项：
+### 1. 🎮 初始化游戏目录
 
-```env
-# Mistral AI API 配置
-MISTRAL_API_KEY=your_api_key_here
-
-# BGA 账号配置
-BGA_USERNAME=your_bga_username
-BGA_PASSWORD=your_bga_password
-
-# 日志配置
-LOG_LEVEL=INFO
-```
-
-注意：`.env` 文件包含敏感信息，请勿将其提交到版本控制系统。
-
-## 使用方法
-
-1. 初始化游戏目录：
 ```bash
 python -m src.main init-game <game_name>
 ```
 
-2. 获取游戏元数据：
+这将创建以下目录结构：
+```
+data/games/<game_name>/
+├── metadata/        # 游戏元数据
+├── rules/          # 规则书相关文件
+└── translations/   # 翻译相关文件
+```
+
+### 2. 📊 获取游戏元数据
+
 ```bash
 python -m src.main fetch-game-info <game_name>
 ```
 
-3. 将规则书 PDF 文件放入 `data/games/<game_name>/rules/original.pdf`
+### 3. 🔍 获取翻译内容
 
-4. 处理规则书：
+```bash
+python -m src.main fetch-translation <game_name>
+```
+
+这将生成以下文件：
+- 📝 `translation_table.md`：翻译对照表
+- 🗃️ `translation_data.json`：结构化数据
+- 📄 `raw.html`：原始 HTML（可选）
+- 📚 `bga_translations.md`：BGA 官方翻译
+- ✍️ `my_translations.md`：个人翻译
+
+### 4. 📖 处理规则书
+
+1. 将规则书 PDF 放入 `rules/original.pdf`
+2. 运行文本提取：
 ```bash
 python -m src.main process-rulebook <game_name>
 ```
 
-5. 开始翻译：
-```bash
-python -m src.main start-translation <game_name>
-```
+### 5. 🎯 翻译流程
 
-## 目录结构
+1. 📖 查看 `translation_table.md` 了解现有翻译
+2. 📑 阅读 `extracted.md` 中的规则书文本
+3. 🤖 使用 AI 辅助翻译：
+   - 提供已有翻译作为参考
+   - 保持术语翻译一致性
+   - 保存到 `my_translations.md`
 
-```
-BGA-Translation-Helper/
-├── data/
-│   └── games/
-│       └── <game_name>/
-│           ├── rules/
-│           │   ├── original.pdf
-│           │   └── extracted.md
-│           ├── translations/
-│           │   └── translation.md
-│           └── metadata/
-│               └── game_info.json
-├── src/
-│   ├── ocr/
-│   │   ├── __init__.py
-│   │   ├── ocr_processor.py
-│   │   ├── pdf_processor.py
-│   │   └── text_formatter.py
-│   ├── bga_login.py
-│   ├── bga_translator.py
-│   └── main.py
-├── Doc/
-│   ├── architecture.md
-│   ├── workflow.md
-│   └── bga_api_flows.md
-├── .env
-├── .gitignore
-├── README.md
-└── requirements.txt
-```
+## 📌 注意事项
 
-## 贡献
+- ⚠️ 请确保正确配置 `.env` 文件
+- 🔄 保持游戏术语翻译的一致性
+- 📚 参考 BGA 平台的官方翻译
+- ✨ 保持翻译的专业性和准确性
 
-欢迎提交 Issue 和 Pull Request！
+## 📁 文件说明
 
-## 许可证
-
-MIT
+- 📊 `game_info.json`：游戏元数据
+- 📝 `translation_table.md`：翻译对照表
+- 🗃️ `translation_data.json`：结构化翻译数据
+- 📄 `raw.html`：原始 HTML 内容（可选）
+- 📚 `bga_translations.md`：BGA 官方翻译
+- ✍️ `my_translations.md`：个人翻译内容
+- 📖 `extracted.md`：规则书提取文本
 
 ## 🤝 贡献
 
-欢迎提交 Issue 和 Pull Request！
+欢迎提交 Issue 和 Pull Request！让我们一起完善这个工具，帮助更多的中文桌游玩家。
 
-## 📄 许可证
+## 📜 许可证
 
-本项目采用 [MIT 许可证](LICENSE)。
+本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
 
 ## 🙏 致谢
 
-- [Board Game Arena](https://boardgamearena.com/)
-- [Mistral OCR](https://mistral.ai/)
+- [Board Game Arena](https://boardgamearena.com/) - 优秀的在线桌游平台
+- 所有为 BGA 平台贡献翻译的志愿者们
