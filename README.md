@@ -1,99 +1,115 @@
-# BGA Translation Helper
+# BGA 翻译助手
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 
-一个用于辅助 Board Game Arena 平台游戏规则翻译的工具。
+一个帮助翻译 Board Game Arena 游戏规则的工具。
 
-## ✨ 功能特点
+## 功能特点
 
-- 📄 OCR 识别：支持从游戏规则书中提取英文文本
-- 🌐 翻译管理：管理和组织游戏规则的翻译内容
-- 🕷️ 爬虫功能：自动获取 BGA 平台上的翻译内容
-- 💡 翻译辅助：提供翻译建议和参考
+- 自动提取规则书文本
+- 使用 Mistral OCR 进行文本识别
+- 支持多种格式的规则书
+- 提供翻译界面
+- 自动保存翻译进度
 
-## 🚀 快速开始
+## 安装
 
-### 安装
-
+1. 克隆仓库：
 ```bash
-# 克隆仓库
-git clone https://github.com/yourusername/BGA-Translation-Helper.git
+git clone https://github.com/PascalDai/BGA-Translation-Helper.git
 cd BGA-Translation-Helper
+```
 
-# 创建虚拟环境
+2. 创建虚拟环境：
+```bash
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
+source venv/bin/activate  # Linux/macOS
 # 或
 .\venv\Scripts\activate  # Windows
+```
 
-# 安装依赖
+3. 安装依赖：
+```bash
 pip install -r requirements.txt
 ```
 
-### 使用
-
-1. 初始化新游戏：
-
+4. 配置环境变量：
 ```bash
-python main.py init-game <game_name>
+cp .env.example .env
+# 编辑 .env 文件，填入您的配置信息
 ```
 
-2. 准备规则书：
+## 配置说明
 
-- 将规则书 PDF 放入 `data/games/<game_name>/rules/original.pdf`
+在项目根目录下创建 `.env` 文件，包含以下配置项：
 
-3. 提取文本：
+```env
+# Mistral AI API 配置
+MISTRAL_API_KEY=your_api_key_here
 
+# BGA 账号配置
+BGA_USERNAME=your_bga_username
+BGA_PASSWORD=your_bga_password
+
+# 日志配置
+LOG_LEVEL=INFO
+```
+
+注意：`.env` 文件包含敏感信息，请勿将其提交到版本控制系统。
+
+## 使用方法
+
+1. 初始化游戏目录：
 ```bash
-python main.py extract-text <game_name>
+python src/main.py init-game <game_name>
 ```
 
-4. 获取 BGA 翻译：
+2. 将规则书 PDF 文件放入 `data/games/<game_name>/rules/original.pdf`
 
+3. 处理规则书：
 ```bash
-python main.py fetch-translations <game_name>
+python src/main.py process-rulebook <game_name>
 ```
 
-5. 开始翻译：
-
+4. 开始翻译：
 ```bash
-python main.py start-translation <game_name>
+python src/main.py start-translation <game_name>
 ```
 
-## 📁 项目结构
+## 目录结构
 
-```mermaid
-graph TD
-    A[BGATranslatehelper] --> B[Doc]
-    A --> C[src]
-    A --> D[data]
-    A --> E[requirements.txt]
-
-    B --> B1[README.md]
-    B --> B2[development.md]
-    B --> B3[architecture.md]
-    B --> B4[workflow.md]
-
-    C --> C1[ocr]
-    C --> C2[crawler]
-    C --> C3[translator]
-    C --> C4[utils]
-
-    D --> D1[games]
-    D --> D2[cache]
-
-    D1 --> D1A[game_name]
-    D1A --> D1A1[rules]
-    D1A --> D1A2[translations]
-    D1A --> D1A3[metadata]
+```
+BGA-Translation-Helper/
+├── data/
+│   └── games/
+│       └── <game_name>/
+│           ├── rules/
+│           │   ├── original.pdf
+│           │   └── extracted.md
+│           └── translations/
+│               └── translation.md
+├── src/
+│   ├── ocr/
+│   │   ├── __init__.py
+│   │   ├── ocr_processor.py
+│   │   ├── pdf_processor.py
+│   │   └── text_formatter.py
+│   └── main.py
+├── .env
+├── .env.example
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
-## 📚 文档
+## 贡献
 
-- [开发计划](Doc/development.md)
-- [系统架构](Doc/architecture.md)
-- [工作流程](Doc/workflow.md)
+欢迎提交 Issue 和 Pull Request！
+
+## 许可证
+
+MIT
 
 ## 🤝 贡献
 

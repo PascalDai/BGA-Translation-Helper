@@ -1,7 +1,7 @@
 # OCR相关
 mistral-ocr>=0.1.0
 PyPDF2>=3.0.0
-Pillow>=9.0.0
+Pillow>=10.0.0
 
 # 爬虫相关
 requests>=2.28.0
@@ -15,7 +15,7 @@ pyyaml>=6.0.0
 
 # 工具
 tqdm>=4.65.0
-python-dotenv>=0.19.0
+python-dotenv>=1.0.0
 argparse>=1.4.0
 
 # 测试

@@ -36,7 +36,12 @@ data/cache/
 *.log
 .env
 .env.local
+data/games/*/rules/original.pdf
+data/games/*/translations/*.md
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Temporary file
+temp_ocr_image.png 
