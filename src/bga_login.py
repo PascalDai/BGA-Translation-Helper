@@ -198,7 +198,7 @@ class BGALogin:
                 # 更新 registrationState
                 registration_state = {
                     "username": username,
-                    "emailAddress": username if '@' in username else None,
+                    "emailAddress": None,
                     "password": password,
                     "numSteps": 2,
                     "loginSource": "email",
@@ -206,52 +206,79 @@ class BGALogin:
                 }
                 self.session.cookies.set('registrationState', json.dumps(registration_state))
                 
-                print("正在尝试登录...")
-                print(f"请求数据: username={username}, remember_me={remember_me}")
+                print(f"正在尝试登录: {username}")
                 response = self.session.post(
                     url,
+                    data=data,
                     headers=self.headers,
-                    data=data
+                    allow_redirects=True
                 )
                 
                 if response.status_code != 200:
                     print(f"登录请求失败，状态码: {response.status_code}")
-                    print(f"响应内容: {response.text}")
-                    if attempt < self.max_retries - 1:
-                        continue
-                    return {"success": False, "error": f"HTTP {response.status_code}"}
+                    print(f"响应内容: {response.text[:200]}")
+                    continue
                 
                 try:
                     result = response.json()
-                    print(f"登录响应: {result}")
+                except json.JSONDecodeError:
+                    print("无法解析响应 JSON")
+                    print(f"响应内容: {response.text[:200]}")
+                    continue
+                
+                if result.get('status') == 1:
+                    print("登录成功")
+                    return result
+                elif result.get('status') == 0:
+                    error = result.get('error', '未知错误')
+                    print(f"登录失败: {error}")
                     
-                    # 检查登录结果
-                    if result.get('status') == 1:
-                        data = result.get('data', {})
-                        if data.get('success'):
-                            return {"success": True}
-                        else:
-                            error_msg = data.get('message', '未知错误')
-                            # 如果是速率限制错误，等待指定时间后重试
-                            if 'Too many login attempts' in error_msg:
-                                wait_seconds = self._handle_rate_limit(data)
-                                if attempt < self.max_retries - 1:
-                                    print(f"需要等待 {wait_seconds} 秒...")
-                                    time.sleep(wait_seconds)
-                                    continue
-                            return {"success": False, "error": error_msg}
-                    else:
-                        return {"success": False, "error": "登录响应格式错误"}
-                except Exception as e:
-                    print(f"解析登录响应失败: {str(e)}")
-                    print(f"响应内容: {response.text}")
-                    if attempt < self.max_retries - 1:
-                        continue
-                    return {"success": False, "error": str(e)}
+                    # 检查是否需要等待
+                    if 'wait_until' in result:
+                        wait_seconds = self._handle_rate_limit(result)
+                        if wait_seconds > 0 and attempt < self.max_retries - 1:
+                            print(f"需要等待 {wait_seconds} 秒")
+                            time.sleep(wait_seconds)
+                            continue
+                    
+                    return result
+                else:
+                    print(f"未知响应状态: {result}")
+                    continue
+                    
             except Exception as e:
-                print(f"登录请求失败: {str(e)}")
+                print(f"登录过程中发生错误: {str(e)}")
                 if attempt < self.max_retries - 1:
                     continue
-                return {"success": False, "error": str(e)}
+                return {"status": 0, "error": str(e)}
         
-        return {"success": False, "error": "超过最大重试次数"} 
+        return {"status": 0, "error": "超过最大重试次数"}
+        
+    def login(self) -> bool:
+        """
+        执行登录流程
+        
+        Returns:
+            bool: 登录是否成功
+        """
+        try:
+            # 获取 request_token
+            if not self.get_request_token():
+                print("获取 request_token 失败")
+                return False
+            
+            # 执行登录
+            login_result = self.login_with_password(self.username, self.password)
+            
+            # 检查登录结果
+            if login_result.get('status') == 1:
+                print("登录成功")
+                return True
+            else:
+                error_msg = login_result.get('error', '未知错误')
+                print(f"登录失败: {error_msg}")
+                return False
+                
+        except Exception as e:
+            print(f"登录过程中发生错误: {str(e)}")
+            return False 

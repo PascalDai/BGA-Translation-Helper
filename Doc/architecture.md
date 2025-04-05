@@ -112,6 +112,7 @@ class GameData:
 - 翻译文件管理
 - 翻译状态追踪
 - 翻译建议生成
+- 自动提交翻译
 
 #### 4.2 数据结构
 
@@ -122,6 +123,34 @@ class Translation:
         self.translated_text = ""
         self.status = "pending"
         self.metadata = {}
+
+class TranslationSubmitter:
+    def __init__(self, game_name):
+        self.game_name = game_name
+        self.translator = BGATranslator()
+        self.translations = {}
+```
+
+#### 4.3 提交流程
+
+- 从 `game_info.json` 获取 `module_id`
+- 从 `translation_table.md` 加载翻译内容
+- 使用 Selenium 自动化提交翻译
+- 提供详细的操作日志
+
+#### 4.4 模块结构
+
+```mermaid
+graph TD
+    A[TranslationSubmitter] --> B[load_game_info]
+    A --> C[load_translation_table]
+    A --> D[submit_translations]
+    
+    B --> E[读取game_info.json]
+    C --> F[读取translation_table.md]
+    D --> G[登录BGA]
+    D --> H[访问翻译页面]
+    D --> I[填写翻译]
 ```
 
 ### 5. 用户界面模块

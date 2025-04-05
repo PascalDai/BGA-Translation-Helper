@@ -30,17 +30,53 @@ ENV/
 .vscode/
 *.swp
 *.swo
+.DS_Store
 
 # Project specific
-data/cache/
+translation.log
 *.log
+data/games/*/
+!data/games/README.md
+
+# Environment variables
 .env
-.env.local
-data/games/*/rules/original.pdf
-data/games/*/translations/*.md
+.env.*
+!.env.example
+
+# Test coverage
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
 
 # OS
-.DS_Store
 Thumbs.db
 
 # Temporary file

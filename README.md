@@ -8,17 +8,18 @@
 ## ✨ 特性
 
 - 🔄 自动获取 BGA 游戏元数据
-- 📝 获取现有翻译内容作为参考
-- 📊 生成结构化的翻译数据
-- 📖 支持规则书文本提取
-- 🤖 支持使用 AI 辅助翻译
+- 📝 获取现有翻译内容
+- 🤖 自动填写翻译内容
+- 🔄 支持分页自动翻译
+- 🚀 自动登录和导航
+- 📖 规则书文本提取
 
 ## 🛠️ 安装
 
 1. 克隆仓库：
 ```bash
-git clone https://github.com/PascalDai/BGA-Translation-Helper.git
-cd BGA-Translation-Helper
+git clone https://github.com/PascalDai/BGATranslatehelper.git
+cd BGATranslatehelper
 ```
 
 2. 创建虚拟环境：
@@ -40,7 +41,6 @@ pip install -r requirements.txt
 ```ini
 BGA_USERNAME=your_username
 BGA_PASSWORD=your_password
-SAVE_RAW_HTML=true
 ```
 
 ## 📋 使用方法
@@ -78,29 +78,25 @@ python -m src.main fetch-translation <game_name>
 - 📚 `bga_translations.md`：BGA 官方翻译
 - ✍️ `my_translations.md`：个人翻译
 
-### 4. 📖 处理规则书
+### 4. 📝 提交翻译
 
-1. 将规则书 PDF 放入 `rules/original.pdf`
-2. 运行文本提取：
+1. 确保翻译对照表 `translation_table.md` 已经准备好
+2. 运行翻译提交脚本：
 ```bash
-python -m src.main process-rulebook <game_name>
+python test_translation_submitter.py
 ```
 
-### 5. 🎯 翻译流程
+脚本会自动执行以下操作：
+- ✅ 自动登录 BGA 账号
+- 🔄 跳转到翻译页面
+- 📝 自动填写翻译内容
+- ⏭️ 自动翻页继续处理
+- 🔄 自动保存翻译内容
 
-1. 📖 查看 `translation_table.md` 了解现有翻译
-2. 📑 阅读 `extracted.md` 中的规则书文本
-3. 🤖 使用 AI 辅助翻译：
-   - 提供已有翻译作为参考
-   - 保持术语翻译一致性
-   - 保存到 `my_translations.md`
-
-## 📌 注意事项
-
-- ⚠️ 请确保正确配置 `.env` 文件
-- 🔄 保持游戏术语翻译的一致性
-- 📚 参考 BGA 平台的官方翻译
-- ✨ 保持翻译的专业性和准确性
+注意事项：
+- 确保翻译对照表中的原文与网页上的完全一致
+- 建议先小范围测试，确认无误后再批量提交
+- 如遇到错误，查看日志文件了解详情
 
 ## 📁 文件说明
 
@@ -109,8 +105,8 @@ python -m src.main process-rulebook <game_name>
 - 🗃️ `translation_data.json`：结构化翻译数据
 - 📄 `raw.html`：原始 HTML 内容（可选）
 - 📚 `bga_translations.md`：BGA 官方翻译
-- ✍️ `my_translations.md`：个人翻译内容
-- 📖 `extracted.md`：规则书提取文本
+- ✍️ `my_translations.md`：个人翻译
+- 📖 `extracted.md`：规则书文本
 
 ## 🤝 贡献
 

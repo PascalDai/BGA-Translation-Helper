@@ -1,118 +1,159 @@
-# BGA 平台 API 流程文档
+# BGA API 流程
 
-## 1. 登录流程
+## 登录流程
 
-### 1.1 登录页面
-- URL: 
-- 方法: 
-- 请求头:
-- 响应:
-  - Cookie:
-  - CSRF Token:
-  - 其他关键信息:
+1. 访问登录页面
+   ```
+   GET https://boardgamearena.com/account/account/login.html
+   ```
 
-### 1.2 登录请求
-- URL:
-- 方法:
-- 请求头:
-- 请求体:
-- 响应:
-  - 状态码:
-  - Cookie:
-  - 重定向 URL:
+2. 提交登录表单
+   ```
+   POST https://boardgamearena.com/account/account/login.html
+   Content-Type: application/x-www-form-urlencoded
+   
+   email={username}&password={password}&rememberme=1&redirect=&submit=submit
+   ```
 
-## 2. 翻译页面访问
+## 游戏元数据获取
 
-### 2.1 翻译列表页面
-- URL:
-- 方法:
-- 请求头:
-- 查询参数:
-- 响应:
-  - 页面结构:
-  - 关键元素:
+1. 获取游戏列表
+   ```
+   GET https://boardgamearena.com/gamelist
+   ```
 
-### 2.2 翻译内容加载
-- URL:
-- 方法:
-- 请求头:
-- 请求参数:
-- 响应格式:
+2. 获取游戏详情
+   ```
+   GET https://boardgamearena.com/gamepanel?game={game_name}
+   ```
 
-## 3. 翻译提交流程
+## 翻译页面操作
 
-### 3.1 翻译表单
-- URL:
-- 方法:
-- 请求头:
-- 请求体格式:
-- 响应:
+### 1. 访问翻译页面
 
-### 3.2 翻译保存
-- URL:
-- 方法:
-- 请求头:
-- 请求体:
-- 响应:
-
-## 4. 错误处理
-
-### 4.1 常见错误码
-- 401: 未授权
-- 403: 禁止访问
-- 404: 页面不存在
-- 429: 请求过于频繁
-- 500: 服务器错误
-
-### 4.2 错误响应格式
-```json
-{
-  "error": "错误代码",
-  "message": "错误描述",
-  "details": {}
-}
+```
+GET https://boardgamearena.com/translation/translation/module.html?id={module_id}
 ```
 
-## 5. 请求限制
+参数说明：
+- `module_id`：模块 ID，从游戏元数据中获取
 
-### 5.1 速率限制
-- 每分钟请求数:
-- 每小时请求数:
-- 限制策略:
+### 2. 获取翻译内容
 
-### 5.2 会话管理
-- 会话有效期:
-- 刷新机制:
-- Cookie 策略:
-
-## 6. 示例请求
-
-### 6.1 登录示例
-```http
-POST /account/login HTTP/1.1
-Host: boardgamearena.com
-Content-Type: application/x-www-form-urlencoded
-...
-
-email=example@email.com&password=******&remember=1
+```
+GET https://boardgamearena.com/translation/translation/getmodulestrings.html?id={module_id}&language=zh&page={page_number}
 ```
 
-### 6.2 翻译获取示例
-```http
-GET /translation/translation?game=example HTTP/1.1
-Host: boardgamearena.com
-Cookie: ...
-...
-```
+参数说明：
+- `module_id`：模块 ID
+- `language`：目标语言（zh 为中文）
+- `page_number`：页码，从 1 开始
 
-## 7. 注意事项
+### 3. 提交翻译
 
-### 7.1 安全考虑
-- 使用 HTTPS
-- 处理敏感信息
-- 遵循速率限制
+页面操作流程：
+1. 定位原文输入框
+   ```javascript
+   document.querySelector(`#original_{text_id}`)
+   ```
 
-### 7.2 最佳实践
-- 保持会话活跃
-- 错误重试策略
-- 日志记录 
+2. 定位翻译输入框
+   ```javascript
+   document.querySelector(`#translated_{text_id}`)
+   ```
+
+3. 填写翻译内容
+   ```javascript
+   element.value = translation
+   ```
+
+4. 自动保存
+   - 系统会自动保存修改的内容
+   - 无需手动点击保存按钮
+
+### 4. 翻页操作
+
+1. 检查是否有下一页
+   ```javascript
+   document.querySelector('.pagination-next')
+   ```
+
+2. 点击下一页按钮
+   ```javascript
+   nextPageButton.click()
+   ```
+
+## 错误处理
+
+### HTTP 状态码
+
+- 200：成功
+- 401：未授权，需要重新登录
+- 403：无权限访问
+- 404：页面不存在
+- 500：服务器错误
+
+### 常见错误
+
+1. 登录失败
+   ```json
+   {
+     "status": "error",
+     "error": "Invalid credentials"
+   }
+   ```
+
+2. 无权限访问
+   ```json
+   {
+     "status": "error",
+     "error": "Access denied"
+   }
+   ```
+
+3. 翻译保存失败
+   ```json
+   {
+     "status": "error",
+     "error": "Failed to save translation"
+   }
+   ```
+
+## 最佳实践
+
+1. 请求间隔
+   - 登录：至少 2 秒
+   - 页面加载：至少 1 秒
+   - 翻译提交：至少 0.5 秒
+
+2. 错误重试
+   - 网络错误：最多重试 3 次
+   - 登录失败：最多重试 2 次
+   - 保存失败：立即重试 1 次
+
+3. 会话管理
+   - 定期检查登录状态
+   - 超时自动重新登录
+   - 保持会话活跃
+
+4. 性能优化
+   - 批量获取翻译内容
+   - 缓存已获取的数据
+   - 避免频繁页面刷新
+
+## 安全注意事项
+
+1. 账号保护
+   - 使用环境变量存储凭据
+   - 避免明文存储密码
+   - 定期更新登录信息
+
+2. 请求限制
+   - 遵守平台访问频率
+   - 避免过度频繁的请求
+   - 合理设置超时时间
+
+3. 数据安全
+   - 本地加密存储敏感数据
+   - 及时清理临时文件
+   - 保护用户隐私信息 

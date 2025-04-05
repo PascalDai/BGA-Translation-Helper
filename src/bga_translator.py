@@ -4,9 +4,11 @@ from dotenv import load_dotenv, find_dotenv
 from .bga_login import BGALogin
 import json
 import logging
+from playwright.sync_api import sync_playwright, Page, Browser
+from pathlib import Path
 
 class BGATranslator:
-    def __init__(self):
+    def __init__(self, game_name: str):
         # 加载环境变量
         env_path = find_dotenv()
         if not env_path:
@@ -17,6 +19,7 @@ class BGATranslator:
         # 获取配置
         self.username = os.getenv('BGA_USERNAME')
         self.password = os.getenv('BGA_PASSWORD')
+        self.game_name = game_name
         
         if not self.username or not self.password:
             raise ValueError("请在 .env 文件中配置 BGA_USERNAME 和 BGA_PASSWORD")
@@ -34,44 +37,91 @@ class BGATranslator:
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
         
-    def login(self) -> bool:
-        """
-        使用配置的账号密码登录 BGA
+        # 初始化 Playwright
+        self.init_browser()
         
-        Returns:
-            bool: 登录是否成功
-        """
+    def init_browser(self):
+        """初始化 Playwright 浏览器"""
         try:
-            print(f"正在使用账号 {self.username} 登录...")
-            
-            # 获取 request_token
-            token = self.client.get_request_token()
-            if not token:
-                print("获取 request_token 失败")
-                return False
-            
-            # 检查用户名
-            check_result = self.client.check_username(self.username)
-            if not check_result.get('success', False):
-                print(f"用户名检查失败: {check_result.get('error', '未知错误')}")
-                return False
-            
-            # 进行登录
-            result = self.client.login_with_password(
-                username=self.username,
-                password=self.password
+            self.playwright = sync_playwright().start()
+            self.browser = self.playwright.chromium.launch(
+                headless=False,
+                args=['--start-maximized']
             )
+            self.context = self.browser.new_context(
+                viewport={'width': 1920, 'height': 1080}
+            )
+            self.page = self.context.new_page()
+            print("成功初始化浏览器")
+        except Exception as e:
+            print(f"初始化浏览器失败: {e}")
+            raise
             
-            # 检查登录结果
-            if result.get('success', False):
-                print("登录成功")
-                return True
-            else:
-                print(f"登录失败: {result.get('error', '未知错误')}")
+    def login(self) -> bool:
+        """使用 Playwright 登录 BGA"""
+        try:
+            # 打开登录页面
+            self.page.goto("https://boardgamearena.com/account")
+            print("已打开登录页面")
+            
+            # 输入用户名
+            self.page.locator("form").filter(has_text="下一个").get_by_placeholder("电子邮件或用户名").click()
+            self.page.locator("form").filter(has_text="下一个").get_by_placeholder("电子邮件或用户名").fill(self.username)
+            print(f"已输入用户名: {self.username}")
+            
+            # 点击"下一个"按钮
+            self.page.get_by_role("link", name="下一个").click()
+            print("已点击'下一个'按钮")
+            
+            # 输入密码
+            self.page.get_by_role("textbox", name="密码").click()
+            self.page.get_by_role("textbox", name="密码").fill(self.password)
+            print("已输入密码")
+            
+            # 点击登录按钮
+            self.page.locator("#account-module").get_by_role("link", name="登录", exact=True).click()
+            print("已点击登录按钮")
+            
+            # 等待登录成功
+            self.page.wait_for_load_state("networkidle")
+            print("登录成功！")
+            
+            # 获取 module_id
+            print("正在获取 module_id...")
+            game_info_path = Path(f"data/games/{self.game_name}/metadata/game_info.json")
+            if not game_info_path.exists():
+                print(f"错误：找不到游戏信息文件 {game_info_path}")
                 return False
+                
+            with open(game_info_path, 'r', encoding='utf-8') as f:
+                game_info = json.load(f)
+                module_id = game_info.get('id')
+                if not module_id:
+                    print("错误：游戏信息中没有找到 module_id")
+                    return False
+                    
+            print(f"成功获取 module_id: {module_id}")
+            
+            # 跳转到翻译页面
+            print("正在跳转到翻译页面...")
+            translation_url = f"https://boardgamearena.com/translation?module_id={module_id}&source_locale=en_US&dest_locale=zh_CN&findtype=untranslated"
+            self.page.goto(translation_url)
+            self.page.wait_for_load_state("networkidle")
+            print("已跳转到翻译页面，请开始录制翻译操作...")
+            
+            return True
         except Exception as e:
             print(f"登录失败: {str(e)}")
             return False
+            
+    def __del__(self):
+        """析构函数，确保关闭浏览器"""
+        if hasattr(self, 'context'):
+            self.context.close()
+        if hasattr(self, 'browser'):
+            self.browser.close()
+        if hasattr(self, 'playwright'):
+            self.playwright.stop()
     
     def get_game_list(self) -> List[Dict]:
         """获取所有游戏列表"""
