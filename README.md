@@ -12,6 +12,9 @@
 - 🤖 自动填写翻译内容
 - 🔄 支持分页自动翻译
 - 🚀 自动登录和导航
+- 💾 自动保存翻译进度
+- 📊 支持 JSON 和 Markdown 格式的翻译文件
+- 🔍 详细的日志记录
 
 ## 🛠️ 安装
 
@@ -64,7 +67,7 @@ python -m src.main fetch-game-info <game_name>
 ```
 
 这将在 `metadata` 目录下生成：
-- 📝 `game_info.json`：游戏的详细信息
+- 📝 `game_info.json`：游戏的详细信息，包括游戏ID、名称、描述等
 
 ### 3. 🔍 获取翻译内容
 
@@ -74,13 +77,19 @@ python -m src.main fetch-translation <game_name>
 
 这将在 `translations` 目录下生成以下文件：
 - 📝 `all_translations.json`：所有翻译内容的JSON数据
-- 📝 `all_translations.md`：所有翻译内容的对照表
+- 📝 `all_translations.md`：所有翻译内容的对照表（包含已翻译内容）
 - 📝 `untranslated.json`：未翻译内容的JSON数据
-- 📝 `untranslated.md`：未翻译内容的对照表
+- 📝 `untranslated.md`：未翻译内容的对照表（用于填写新翻译）
 
 ### 4. 📝 提交翻译
 
-1. 在 `untranslated.md` 文件中填写译文
+1. 在 `untranslated.md` 文件中填写译文，格式如下：
+```markdown
+| 原文 | 原文出处 | 译文 |
+|------|----------|------|
+| Original text | Context | 中文翻译 |
+```
+
 2. 运行翻译提交命令：
 ```bash
 python -m src.main submit-translations <game_name>
@@ -93,18 +102,30 @@ python -m src.main submit-translations <game_name>
 - ⏭️ 自动翻页继续处理
 - 🔄 自动保存翻译内容
 
-注意事项：
-- 确保翻译对照表中的原文与网页上的完全一致
-- 建议先小范围测试，确认无误后再批量提交
-- 如遇到错误，查看日志文件了解详情
-
 ## 📁 文件说明
 
-- 📊 `game_info.json`：游戏元数据
-- 📝 `all_translations.json`：所有翻译内容（JSON格式）
-- 📝 `all_translations.md`：所有翻译内容的对照表
-- 📝 `untranslated.json`：未翻译内容（JSON格式）
-- 📝 `untranslated.md`：未翻译内容的对照表
+- 📊 `game_info.json`：游戏元数据，包含游戏ID、名称、描述等信息
+- 📝 `all_translations.json`：所有翻译内容，包括已翻译和未翻译的条目
+- 📝 `all_translations.md`：所有翻译内容的对照表，方便查看现有翻译
+- 📝 `untranslated.json`：未翻译内容，用于程序处理
+- 📝 `untranslated.md`：未翻译内容的对照表，用于填写新翻译
+
+## 🔍 注意事项
+
+1. 翻译提交前：
+   - 确保 `untranslated.md` 中的原文与网页上的完全一致
+   - 检查翻译内容是否符合游戏术语规范
+   - 建议先小范围测试，确认无误后再批量提交
+
+2. 翻译过程中：
+   - 程序会自动处理变量占位符（如 `${player_name}`）
+   - 保持格式标记（如 HTML 标签）不变
+   - 注意保留原文中的空格和标点符号
+
+3. 错误处理：
+   - 如遇到错误，查看控制台输出的详细日志
+   - 确保网络连接稳定
+   - 检查 BGA 账号登录状态
 
 ## 🤝 贡献
 
