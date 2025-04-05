@@ -80,4 +80,7 @@ wheels/
 Thumbs.db
 
 # Temporary file
-temp_ocr_image.png 
+temp_ocr_image.png
+
+# Test files
+tests/ 
