@@ -86,29 +86,6 @@ class BGATranslator:
             self.page.wait_for_load_state("networkidle")
             print("登录成功！")
             
-            # 获取 module_id
-            print("正在获取 module_id...")
-            game_info_path = Path(f"data/games/{self.game_name}/metadata/game_info.json")
-            if not game_info_path.exists():
-                print(f"错误：找不到游戏信息文件 {game_info_path}")
-                return False
-                
-            with open(game_info_path, 'r', encoding='utf-8') as f:
-                game_info = json.load(f)
-                module_id = game_info.get('id')
-                if not module_id:
-                    print("错误：游戏信息中没有找到 module_id")
-                    return False
-                    
-            print(f"成功获取 module_id: {module_id}")
-            
-            # 跳转到翻译页面
-            print("正在跳转到翻译页面...")
-            translation_url = f"https://boardgamearena.com/translation?module_id={module_id}&source_locale=en_US&dest_locale=zh_CN&findtype=untranslated"
-            self.page.goto(translation_url)
-            self.page.wait_for_load_state("networkidle")
-            print("已跳转到翻译页面，请开始录制翻译操作...")
-            
             return True
         except Exception as e:
             print(f"登录失败: {str(e)}")
@@ -374,24 +351,28 @@ class BGATranslator:
             bool: 更新是否成功
         """
         try:
+            # 使用BGALogin进行登录
+            if not self.client.login():
+                self.logger.error("BGALogin登录失败")
+                return False
+                
             # 获取游戏详情
             details = self.get_game_details(game_id)
             if not details:
                 self.logger.error(f"无法获取游戏 {game_id} 的详情")
                 return False
                 
-            # 创建游戏目录结构
-            game_dir = os.path.join(self.games_dir, game_id)
-            metadata_dir = os.path.join(game_dir, 'metadata')
-            os.makedirs(metadata_dir, exist_ok=True)
-            
             # 保存游戏信息
-            game_info_path = os.path.join(metadata_dir, 'game_info.json')
-            with open(game_info_path, 'w', encoding='utf-8') as f:
+            metadata_dir = Path(f"data/games/{game_id}/metadata")
+            metadata_dir.mkdir(parents=True, exist_ok=True)
+            
+            game_info_path = metadata_dir / "game_info.json"
+            with open(game_info_path, "w", encoding="utf-8") as f:
                 json.dump(details, f, ensure_ascii=False, indent=2)
                 
-            self.logger.info(f"已更新游戏 {game_id} 的信息到 {game_info_path}")
+            self.logger.info(f"已保存游戏信息到 {game_info_path}")
             return True
+            
         except Exception as e:
             self.logger.error(f"更新游戏信息时发生错误: {str(e)}")
             return False 

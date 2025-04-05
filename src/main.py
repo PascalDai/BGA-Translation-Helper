@@ -54,7 +54,7 @@ class GameManager:
         """获取游戏信息"""
         try:
             # 初始化翻译器
-            translator = BGATranslator()
+            translator = BGATranslator(self.game_name)
             
             # 登录 BGA
             if not translator.login():
