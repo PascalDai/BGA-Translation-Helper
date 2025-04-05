@@ -230,8 +230,138 @@ class BGATranslator:
         Returns:
             Optional[Dict]: 翻译内容，如果获取失败则返回 None
         """
-        # TODO: 实现获取翻译内容的功能
-        pass
+        try:
+            self.logger.info(f"开始获取游戏 {game_id} 的翻译内容...")
+            
+            # 获取游戏信息
+            game_info_path = Path(f"data/games/{game_id}/metadata/game_info.json")
+            if not game_info_path.exists():
+                self.logger.error(f"错误：找不到游戏信息文件 {game_info_path}")
+                return None
+                
+            with open(game_info_path, 'r', encoding='utf-8') as f:
+                game_info = json.load(f)
+                module_id = game_info.get('id')
+                if not module_id:
+                    self.logger.error("错误：游戏信息中没有找到 module_id")
+                    return None
+                    
+            self.logger.info(f"成功获取 module_id: {module_id}")
+            
+            # 创建翻译目录
+            translations_dir = Path(f"data/games/{game_id}/translations")
+            translations_dir.mkdir(parents=True, exist_ok=True)
+            
+            # 1. 获取所有翻译内容
+            self.logger.info("正在获取所有翻译内容...")
+            all_translations_url = f"https://boardgamearena.com/translation?module_id={module_id}&source_locale=en_US&dest_locale=zh_CN&findtype=all"
+            self.page.goto(all_translations_url)
+            self.page.wait_for_load_state("networkidle")
+            self.page.wait_for_timeout(5000)  # 等待5秒确保页面加载完成
+            
+            all_translations = {}
+            all_textareas = self.page.locator("textarea[id^='toTranslate_']").all()
+            
+            for textarea in all_textareas:
+                try:
+                    original_id = textarea.get_attribute("id")
+                    if not original_id:
+                        continue
+                        
+                    original_text = textarea.evaluate("node => node.value")
+                    if not original_text:
+                        continue
+                        
+                    # 获取原文出处
+                    context_elem = self.page.locator(f"#context_{original_id.split('_')[1]}")
+                    context = context_elem.inner_text() if context_elem.count() > 0 else ""
+                    
+                    # 获取已有的翻译（如果有）
+                    translation_textarea = self.page.locator(f"#translation_{original_id.split('_')[1]}")
+                    translation = translation_textarea.evaluate("node => node.value") if translation_textarea.count() > 0 else ""
+                    
+                    all_translations[original_id] = {
+                        "original": original_text,
+                        "context": context,
+                        "translation": translation
+                    }
+                    
+                except Exception as e:
+                    self.logger.error(f"处理翻译项时出错: {e}")
+                    continue
+            
+            # 2. 获取未翻译内容
+            self.logger.info("正在获取未翻译内容...")
+            untranslated_url = f"https://boardgamearena.com/translation?module_id={module_id}&source_locale=en_US&dest_locale=zh_CN&findtype=untranslated"
+            self.page.goto(untranslated_url)
+            self.page.wait_for_load_state("networkidle")
+            self.page.wait_for_timeout(5000)
+            
+            untranslated = {}
+            untranslated_textareas = self.page.locator("textarea[id^='toTranslate_']").all()
+            
+            for textarea in untranslated_textareas:
+                try:
+                    original_id = textarea.get_attribute("id")
+                    if not original_id:
+                        continue
+                        
+                    original_text = textarea.evaluate("node => node.value")
+                    if not original_text:
+                        continue
+                        
+                    context_elem = self.page.locator(f"#context_{original_id.split('_')[1]}")
+                    context = context_elem.inner_text() if context_elem.count() > 0 else ""
+                    
+                    untranslated[original_id] = {
+                        "original": original_text,
+                        "context": context,
+                        "translation": ""
+                    }
+                    
+                except Exception as e:
+                    self.logger.error(f"处理未翻译项时出错: {e}")
+                    continue
+            
+            # 保存所有翻译内容
+            all_json_path = translations_dir / "all_translations.json"
+            with open(all_json_path, "w", encoding="utf-8") as f:
+                json.dump(all_translations, f, ensure_ascii=False, indent=2)
+                
+            # 保存未翻译内容
+            untranslated_json_path = translations_dir / "untranslated.json"
+            with open(untranslated_json_path, "w", encoding="utf-8") as f:
+                json.dump(untranslated, f, ensure_ascii=False, indent=2)
+                
+            # 生成所有翻译的对照表
+            all_md_content = "| 原文 | 原文出处 | 当前译文 |\n|------|----------|----------|\n"
+            for item in all_translations.values():
+                all_md_content += f"| {item['original']} | {item['context']} | {item['translation']} |\n"
+                
+            all_md_path = translations_dir / "all_translations.md"
+            with open(all_md_path, "w", encoding="utf-8") as f:
+                f.write(all_md_content)
+                
+            # 生成未翻译内容的对照表
+            untranslated_md_content = "| 原文 | 原文出处 | 译文 |\n|------|----------|------|\n"
+            for item in untranslated.values():
+                untranslated_md_content += f"| {item['original']} | {item['context']} | |\n"
+                
+            untranslated_md_path = translations_dir / "untranslated.md"
+            with open(untranslated_md_path, "w", encoding="utf-8") as f:
+                f.write(untranslated_md_content)
+                
+            self.logger.info(f"成功保存翻译内容到 {translations_dir}")
+            self.logger.info(f"- 所有翻译JSON：{all_json_path}")
+            self.logger.info(f"- 所有翻译Markdown：{all_md_path}")
+            self.logger.info(f"- 未翻译JSON：{untranslated_json_path}")
+            self.logger.info(f"- 未翻译Markdown：{untranslated_md_path}")
+            
+            return {"all": all_translations, "untranslated": untranslated}
+            
+        except Exception as e:
+            self.logger.error(f"获取翻译内容时发生错误: {str(e)}")
+            return None
     
     def update_game_info(self, game_id: str) -> bool:
         """

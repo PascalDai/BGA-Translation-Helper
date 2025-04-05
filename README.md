@@ -12,7 +12,6 @@
 - 🤖 自动填写翻译内容
 - 🔄 支持分页自动翻译
 - 🚀 自动登录和导航
-- 📖 规则书文本提取
 
 ## 🛠️ 安装
 
@@ -55,8 +54,7 @@ python -m src.main init-game <game_name>
 ```
 data/games/<game_name>/
 ├── metadata/        # 游戏元数据
-├── rules/          # 规则书相关文件
-└── translations/   # 翻译相关文件
+└── translations/    # 翻译相关文件
 ```
 
 ### 2. 📊 获取游戏元数据
@@ -65,25 +63,27 @@ data/games/<game_name>/
 python -m src.main fetch-game-info <game_name>
 ```
 
+这将在 `metadata` 目录下生成：
+- 📝 `game_info.json`：游戏的详细信息
+
 ### 3. 🔍 获取翻译内容
 
 ```bash
 python -m src.main fetch-translation <game_name>
 ```
 
-这将生成以下文件：
-- 📝 `translation_table.md`：翻译对照表
-- 🗃️ `translation_data.json`：结构化数据
-- 📄 `raw.html`：原始 HTML（可选）
-- 📚 `bga_translations.md`：BGA 官方翻译
-- ✍️ `my_translations.md`：个人翻译
+这将在 `translations` 目录下生成以下文件：
+- 📝 `all_translations.json`：所有翻译内容的JSON数据
+- 📝 `all_translations.md`：所有翻译内容的对照表
+- 📝 `untranslated.json`：未翻译内容的JSON数据
+- 📝 `untranslated.md`：未翻译内容的对照表
 
 ### 4. 📝 提交翻译
 
-1. 确保翻译对照表 `translation_table.md` 已经准备好
-2. 运行翻译提交脚本：
+1. 在 `untranslated.md` 文件中填写译文
+2. 运行翻译提交命令：
 ```bash
-python test_translation_submitter.py
+python -m src.main submit-translations <game_name>
 ```
 
 脚本会自动执行以下操作：
@@ -101,12 +101,10 @@ python test_translation_submitter.py
 ## 📁 文件说明
 
 - 📊 `game_info.json`：游戏元数据
-- 📝 `translation_table.md`：翻译对照表
-- 🗃️ `translation_data.json`：结构化翻译数据
-- 📄 `raw.html`：原始 HTML 内容（可选）
-- 📚 `bga_translations.md`：BGA 官方翻译
-- ✍️ `my_translations.md`：个人翻译
-- 📖 `extracted.md`：规则书文本
+- 📝 `all_translations.json`：所有翻译内容（JSON格式）
+- 📝 `all_translations.md`：所有翻译内容的对照表
+- 📝 `untranslated.json`：未翻译内容（JSON格式）
+- 📝 `untranslated.md`：未翻译内容的对照表
 
 ## 🤝 贡献
 

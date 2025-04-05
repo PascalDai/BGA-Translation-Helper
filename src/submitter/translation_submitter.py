@@ -22,7 +22,7 @@ class TranslationSubmitter:
     def __init__(self, game_name: str):
         self.game_name = game_name
         self.game_dir = Path(f"data/games/{game_name}")
-        self.translation_table_path = self.game_dir / "translations/translation_table.md"
+        self.untranslated_path = self.game_dir / "translations/untranslated.md"
         self.game_info_path = self.game_dir / "metadata/game_info.json"
         
         # 加载环境变量
@@ -86,7 +86,7 @@ class TranslationSubmitter:
         """加载翻译对照表"""
         translations = {}
         try:
-            with open(self.translation_table_path, 'r', encoding='utf-8') as f:
+            with open(self.untranslated_path, 'r', encoding='utf-8') as f:
                 content = f.read()
                 # 解析翻译对照表
                 for line in content.split('\n'):
@@ -97,7 +97,7 @@ class TranslationSubmitter:
                         if len(parts) >= 4:  # 分割后应该至少有4部分：空、原文、原文出处、译文
                             original = parts[1]  # 第2列是原文
                             translation = parts[3]  # 第4列是译文
-                            if original and translation:
+                            if original and translation and translation != '':  # 确保译文不为空
                                 translations[original] = translation
                                 logger.debug(f"加载翻译: {original} -> {translation}")
                 logger.info(f"成功加载翻译对照表，共 {len(translations)} 条翻译")

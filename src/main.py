@@ -11,8 +11,7 @@ import argparse
 from pathlib import Path
 from .ocr import OCRManager
 from .bga_translator import BGATranslator
-from .commands.submit_translations import submit_translations
-from .submitter import TranslationSubmitter
+from .submitter.translation_submitter import TranslationSubmitter
 
 # 配置日志
 logging.basicConfig(
@@ -71,6 +70,28 @@ class GameManager:
             logger.error(f"获取游戏信息失败: {e}")
             raise
     
+    def fetch_translations(self):
+        """获取翻译内容"""
+        try:
+            # 初始化翻译器
+            translator = BGATranslator(self.game_name)
+            
+            # 登录 BGA
+            if not translator.login():
+                raise Exception("登录失败")
+            
+            # 获取翻译内容
+            translations = translator.get_translations(self.game_name)
+            if translations:
+                logger.info(f"成功获取游戏 {self.game_name} 的翻译内容")
+                return True
+            else:
+                raise Exception(f"获取游戏 {self.game_name} 的翻译内容失败")
+                
+        except Exception as e:
+            logger.error(f"获取翻译内容失败: {e}")
+            raise
+    
     def process_rulebook(self):
         """处理规则书"""
         try:
@@ -99,11 +120,16 @@ class GameManager:
 
 def submit_translations(args):
     """提交翻译内容到BGA平台"""
-    submitter = TranslationSubmitter(args.game_name)
-    if submitter.submit_translations():
-        print("翻译提交成功！")
-    else:
-        print("翻译提交失败，请查看日志了解详情。")
+    try:
+        logger.info(f"开始提交游戏 {args.game_name} 的翻译内容...")
+        submitter = TranslationSubmitter(args.game_name)
+        if submitter.submit_translations():
+            logger.info("翻译提交成功！")
+        else:
+            logger.error("翻译提交失败，请查看日志了解详情。")
+    except Exception as e:
+        logger.error(f"提交翻译时发生错误: {e}")
+        raise
 
 def main():
     """主函数"""
@@ -121,6 +147,10 @@ def main():
     # 获取游戏信息命令
     fetch_info_parser = subparsers.add_parser("fetch-game-info", help="获取游戏信息")
     fetch_info_parser.add_argument("game_name", help="游戏名称")
+    
+    # 获取翻译内容命令
+    fetch_trans_parser = subparsers.add_parser("fetch-translation", help="获取翻译内容")
+    fetch_trans_parser.add_argument("game_name", help="游戏名称")
     
     # 添加提交翻译命令
     submit_parser = subparsers.add_parser('submit-translations', help='提交翻译内容')
@@ -140,6 +170,9 @@ def main():
             
         elif args.command == "fetch-game-info":
             game_manager.fetch_game_info()
+            
+        elif args.command == "fetch-translation":
+            game_manager.fetch_translations()
             
         elif args.command == "submit-translations":
             submit_translations(args)
